@@ -63,7 +63,7 @@ def generate_current_distribution_table(
     current_df['DirBin'] = pd.cut(current_df['direction'], bins=bins_dir, right=False, labels=labels_dir)
     current_df.loc[current_df['direction'] > 345, 'DirBin'] = 0
 
-    labels_speed = [f"{speed_thresholds[i]}-{speed_thresholds[i+1]}" for i in range(len(speed_thresholds)-1)]
+    labels_speed = [f"{round(speed_thresholds[i], 2)}-{round(speed_thresholds[i+1], 2)}" for i in range(len(speed_thresholds)-1)]
     current_df['SpeedBin'] = pd.cut(current_df['speed'], bins=speed_thresholds, right=False, labels=labels_speed)
 
     dist = pd.crosstab(current_df['SpeedBin'], current_df['DirBin'])
@@ -86,6 +86,7 @@ def generate_current_distribution_table(
         [(directions[i], degrees[i]) for i in range(len(directions))],
         names=["Direction","Degrees"]
     )
+    dist = dist.round(2)
     return dist
 
 

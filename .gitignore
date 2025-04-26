@@ -1,3 +1,5 @@
 *.nc
 .vscode/launch.json
 __pycache__
+BRAN_outputs/.DS_Store
+*.DS_Store
