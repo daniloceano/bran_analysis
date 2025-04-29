@@ -4,8 +4,11 @@ from glob import glob
 import os
 
 # Define o ponto de interesse
-LAT_PONTO = -21.6389
-LON_PONTO = -40.8693
+#LAT_PONTO = -21.6389
+#LON_PONTO = -40.8693
+LAT_PONTO = -20.75
+LON_PONTO = -40.5
+
 
 # Lista e ordena todos os arquivos
 files = sorted(glob("/p1-sto-swell/danilocs/BRAN2020/BRAN_data/ocean_eta_t_*.nc"))
@@ -42,7 +45,7 @@ out_dir = "../BRAN_outputs"
 os.makedirs(out_dir, exist_ok=True)
 
 # Salva em CSV
-out_path = os.path.join(out_dir, "eta_t_Ubu.csv")
+out_path = os.path.join(out_dir, "eta_t_Ubu2.csv")
 df_all.to_csv(out_path, index=False)
 
 print(f"Salvo em {out_path}")
