@@ -3,3 +3,4 @@
 __pycache__
 BRAN_outputs/.DS_Store
 *.DS_Store
+src_currents/.vscode/launch.json

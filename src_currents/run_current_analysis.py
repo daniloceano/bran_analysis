@@ -13,13 +13,14 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from metpy.calc import wind_speed, wind_direction
+from metpy.units import units
 
 from current_analysis import generate_current_distribution_table, plot_wind_rose
 
-
 def run_analysis(
-    input_csv: str = "BRAN_outputs/dados_u_v_Ubu.csv",
-    output_dir: str = "BRAN_outputs/Ubu",
+    input_csv: str = "../BRAN_outputs/dados_u_v_Aracatu.csv",
+    output_dir: str = "../BRAN_outputs/Aracatu",
     seasons: list = [None, 'DJF', 'MAM', 'JJA', 'SON']
 ) -> None:
     """
@@ -37,8 +38,8 @@ def run_analysis(
 
     # load and preprocess data
     df = pd.read_csv(input_csv, parse_dates=['Time'], index_col='Time')
-    df['velocidade'] = np.sqrt(df['u'] ** 2 + df['v'] ** 2)
-    df['direcao'] = (np.degrees(np.arctan2(df['v'], df['u'])) + 360) % 360
+    df['velocidade'] = wind_speed(df['u'].values * units('m/s'), df['v'].values * units('m/s'))
+    df['direcao'] = wind_direction(df['u'].values * units('m/s'), df['v'].values * units('m/s'), convention='to')
 
     # iterate over all depths
     depths = sorted(df['st_ocean'].unique())
