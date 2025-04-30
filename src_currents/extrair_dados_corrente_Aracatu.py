@@ -5,8 +5,8 @@ from pathlib import Path
 import numpy as np
 
 # Diretório onde os arquivos BRAN estão salvos
-BRAN_DIR = Path("BRAN_currents_Ubu")
-OUTPUT_CSV = "dados_u_v_Ubu.csv"
+BRAN_DIR = Path("BRAN_currents_Aracatu")
+OUTPUT_CSV = "dados_u_v_Aracatu.csv"
 
 # Coordenadas do ponto de interesse (Porto de Ubu - ES)
 LAT_PONTO = -21.6389
