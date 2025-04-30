@@ -1,0 +1,84 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\begin{document}
+
+\title{Metodologia de Reconstrução do Nível Total do Mar (BRAN + FES + MDT)}
+\author{}
+\date{}
+\maketitle
+
+\section{Introdução}
+Esta nota descreve a combinação de três produtos distintos para reconstruir o nível total do mar em relação ao geóide:
+\begin{itemize}
+  \item \textbf{BRAN2020} (reanálise oceânica): fornece a altura do nível do mar modelada, com um datum interno de modelo.
+  \item \textbf{FES2022} (marés astronômicas): componente de maré referida ao geóide (tide-free).
+  \item \textbf{MDT CNES-CLS22} (Mean Dynamic Topography): relevo dinâmico médio da superfície do mar acima do geóide, fixo para 1993--2012.
+\end{itemize}
+
+\section{Passo 1: Extrair Anomalias Meteorológicas (BRAN2020)}
+\begin{enumerate}
+  \item Obtenha a série temporal de SSH (sea-surface height) do BRAN2020 no ponto de interesse.
+  \item Calcule a média de longo prazo (climatologia, ex.: 1993--2012).
+  \item Subtraia essa média da série total para obter as anomalias meteorológicas (surge e setup de ondas).
+\end{enumerate}
+
+\textbf{Exemplo simplificado:}
+\begin{align*}
+\text{SSH}_{\text{modelo}}(t) &= [1{,}15,\; 1{,}20,\; 1{,}10,\;\dots]\;\mathrm{m},\\
+\overline{\text{SSH}} &= 1{,}15\;\mathrm{m},\\
+\text{Anomalia}(t) &= \text{SSH}_{\text{modelo}}(t) - \overline{\text{SSH}}
+\end{align*}
+
+\section{Passo 2: Obter a Maré (FES2022)}
+\begin{enumerate}
+  \item Extraia os valores de maré (tide-free) do FES2022 no mesmo ponto/grade.
+\end{enumerate}
+
+\textbf{Exemplo simplificado:}
+\[
+\text{Maré}(t) = [ +0{,}30,\; +0{,}25,\; +0{,}10,\;\dots]\;\mathrm{m}
+\]
+
+\section{Passo 3: Adotar o MDT como Referência Estática}
+\begin{enumerate}
+  \item Para cada ponto, recupere o valor único de MDT CNES-CLS22 (relevo médio dinâmico).
+\end{enumerate}
+
+\textbf{Exemplo simplificado:}
+\[
+\text{MDT}(\varphi,\lambda) = +0{,}20\;\mathrm{m}
+\]
+
+\section{Passo 4: Montar o Nível Total do Mar}
+A composição final é dada por:
+\[
+\mathrm{SSH}_{\mathrm{total}}(t)
+= \underbrace{\mathrm{MDT}}_{\substack{\text{estático}\\\text{(sobre o geóide)}}}
++ \underbrace{\mathrm{FES2022}(t)}_{\substack{\text{maré}\\\text{tide-free}}}
++ \underbrace{\mathrm{Anomalias}_{\mathrm{BRAN}}(t)}_{\substack{\text{surge/anomalias}\\\text{offset cancelado}}}
+\]
+
+\textbf{Exemplo numérico:}
+\[
+\mathrm{SSH}_{\mathrm{total}} = 0{,}20 + 0{,}30 + 0{,}05 = 0{,}55\;\mathrm{m}
+\]
+
+\section{Principais Sutilezas}
+\begin{itemize}
+  \item \textbf{Datum interno do BRAN:} a média de longo prazo do modelo é arbitrária; remover esse offset é essencial.
+  \item \textbf{MSS vs MDT:} MSS contém o geóide + MDT, referida ao elipsoide; MDT = MSS -- geóide.
+  \item \textbf{Datum de referência:} MDT + FES + anomalias resultam em SSH referida ao geóide, padrão em oceanografia.
+\end{itemize}
+
+\section{Recomendações Finais}
+\begin{itemize}
+  \item Interpole MDT, FES e BRAN para a mesma malha ou coordenada.
+  \item Alinhe datums removendo médias (modelo e marégrafo) no mesmo período.
+  \item Compare séries usando bias, RMSE e correlação.
+\end{itemize}
+
+\end{document}
