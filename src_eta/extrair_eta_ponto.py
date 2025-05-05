@@ -4,10 +4,8 @@ from glob import glob
 import os
 
 # Define o ponto de interesse
-#LAT_PONTO = -21.6389
-#LON_PONTO = -40.8693
-LAT_PONTO = -20.75
-LON_PONTO = -40.5
+LAT_PONTO = -21.30076
+LON_PONTO = -40.96420
 
 
 # Lista e ordena todos os arquivos
@@ -45,7 +43,7 @@ out_dir = "../BRAN_outputs"
 os.makedirs(out_dir, exist_ok=True)
 
 # Salva em CSV
-out_path = os.path.join(out_dir, "eta_t_Ubu2.csv")
+out_path = os.path.join(out_dir, "eta_t_Itabapoana.csv")
 df_all.to_csv(out_path, index=False)
 
 print(f"Salvo em {out_path}")
